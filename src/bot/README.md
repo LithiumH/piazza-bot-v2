@@ -1,59 +1,62 @@
 # The BOT
 This directory contains source code for the bot! There are two things here:
-1. A scrubber that scrubs the piazzas specified
+1. A scraper that scrubs the piazzas specified
 2. A bot that runs constantly to monitor a specific piazza
 
 ## The Scrubber
-The scrubber is a bot that scrubs the piazzas specified. The scrubber can be launched
-by the scrubber script, or imported by the bot if scrubbing is required.
+The scraper is a bot that scrubs the piazzas specified. The scraper can be launched
+by the scraper script, or imported by the bot if scrubbing is required.
 
-The scrubber script takes in a source directory on launch, and it will ask for the 
+The scraper script takes in a source directory on launch, and it will ask for the 
 classes/semesters that we want to scrub. The values are of the following: `fa16`;
 `su16`; `sp16`; `fa15`; `sp15`; `fa14`; `test`. The `test` class is created to test
 the validity of the answers.
 
-The scrubber will generate a json file with a map of class to an array of Posts.
+The scraper will generate a json file with a map of class to an array of Posts.
+```
+[
+  {
+    'class_id': string,
+    'posts': [Post, Post, ...]
+  }, ...
+]
+```
+
+Each `Post` has some information and contains the question and answers.
 ```
 {
-  class_id: [post_1, post_2, ...]
+  'class_id': string, 
+  'post_id': string, 
+  'post_cid': int,
+  'is_private': boolean,
+  'question': Question,
+  'st_answer': Answer,
+  'ta_answer': Answer,
+  'follow_ups': [FollowUp, FollowUp, ...],
+  'views': int
 }
 ```
 
-Each `post` has some information and contains the question and answers.
+Each `Question` has some information and the text of the question.
 ```
 {
-  class_id: string, 
-  post_id: string, 
-  post_cid: int,
-  is_private: boolean,
-  question: question,
-  st_answer: answer,
-  ta_answer: answer,
-  follow_ups: [follow_up, follow_up, ...]
-  views: int
+  'title': string,
+  'text': string,
+  'last_update': string,
+  'authors': [string, string, ...],
+  'good_question_count': int,
+  'categories': [string, string, ...]
 }
 ```
 
-Each `question` has some information and the text of the question.
+Each `Answer` has some informatino and the text of the answer.
 ```
 {
-  title: string,
-  text: string,
-  last_update: string,
-  authors: [string, string, ...]
-  good_question_count: int,
-  categories: [string, string, ...]
-}
-```
-
-Each `answer` has some informatino and the text of the answer.
-```
-{
-  text: string,
-  latest_update: string,
-  authors: [string, string, ...]
-  good_answer_count: int,
-  endorsed: boolean
+  'text': string,
+  'latest_update': string,
+  'authors': [string, string, ...],
+  'good_answer_count': int,
+  'endorsed': boolean
 }
 ```
 
