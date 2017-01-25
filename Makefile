@@ -1,20 +1,16 @@
-# Minimal makefile for Sphinx documentation
-#
+DATADIR			= data/db.json
+LAUNCHSCRIPT	= src/launch.py
+SEMS			= fa16 su16 sp16 fa15 sp15 fa14 test  # Change this to exclude semesters
+LOGIN			= .login
 
-# You can set these variables from the command line.
-SPHINXOPTS    =
-SPHINXBUILD   = sphinx-build
-SPHINXPROJ    = piazza-bot
-SOURCEDIR     = docs
-BUILDDIR      = build
+default:
+	python -i $(LAUNCHSCRIPT) realtime test --path $(DATADIR) --login $(LOGIN)
 
-# Put it first so that "make" without argument is like "make help".
-help:
-	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+scrub-all:
+	python -i $(LAUNCHSCRIPT) scrubber test --path $(DATADIR) --login $(LOGIN)
 
-.PHONY: help Makefile
+scrub:
+	python -i $(LAUNCHSCRIPT) scrubber test --path $(DATADIR) --sems $(SEMS) --login $(LOGIN)
 
-# Catch-all target: route all unknown targets to Sphinx using the new
-# "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
-%: Makefile
-	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+test:
+	python

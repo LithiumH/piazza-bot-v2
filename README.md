@@ -9,6 +9,27 @@ one from all the data gathered from previous years and another from the current 
 # Installation
 To intall dependencies, type `pip install -r requirements.txt`
 
+# Running
+Although not required, please create a `.login` file that contains your username and
+password on 2 lines so it is easier to lauch next time. The file is gitignored.
+
+The Makefile contains some preinstalled launching values. To scrub all semesters
+please run `make scrub-all` or you can edit the Makefile to scrub specific semesters
+
+To run manually, run
+```
+python -i src/launch.py [bot-type] [current-semester] --path PATH [--options]
+```
+
+`bot-type` is either `realtime` or `scrubber`
+
+`current-semester` is the semester you want to monitor, only if you are using the realtime bot.
+
+For a full list of options just run
+```
+python -i src/launch.py -h
+```
+
 # Dependencies
 [piazza-api](https://github.com/hfaran/piazza-api)
 
