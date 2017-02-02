@@ -14,3 +14,6 @@ scrub:
 
 test:
 	python
+
+clean:
+	find . -type f -name '*.pyc' -delete
