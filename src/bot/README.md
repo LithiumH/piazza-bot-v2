@@ -32,7 +32,6 @@ Each `Post` has some information and contains the question and answers.
   'question': Question,
   'st_answer': Answer,
   'ta_answer': Answer,
-  'follow_ups': [FollowUp, FollowUp, ...],
   'views': int
 }
 ```
@@ -43,7 +42,6 @@ Each `Question` has some information and the text of the question.
   'title': string,
   'text': string,
   'last_update': string,
-  'authors': [string, string, ...],
   'good_question_count': int,
   'categories': [string, string, ...]
 }
@@ -54,7 +52,6 @@ Each `Answer` has some informatino and the text of the answer.
 {
   'text': string,
   'latest_update': string,
-  'authors': [string, string, ...],
   'good_answer_count': int,
   'endorsed': boolean
 }

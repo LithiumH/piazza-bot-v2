@@ -3,14 +3,19 @@ LAUNCHSCRIPT	= src/launch.py
 SEMS			= fa16 su16 sp16 fa15 sp15 fa14 test  # Change this to exclude semesters
 LOGIN			= .login
 
-default:
+default: scrape
+
+real:
 	python -i $(LAUNCHSCRIPT) realtime test --path $(DATADIR) --login $(LOGIN)
 
-scrub-all:
-	python -i $(LAUNCHSCRIPT) scrubber test --path $(DATADIR) --login $(LOGIN)
+scrape-all:
+	python -i $(LAUNCHSCRIPT) scraper test --path $(DATADIR) --login $(LOGIN)
 
-scrub:
-	python -i $(LAUNCHSCRIPT) scrubber test --path $(DATADIR) --sems $(SEMS) --login $(LOGIN)
+scrape:
+	python -i $(LAUNCHSCRIPT) scraper test --path $(DATADIR) --sems $(SEMS) --login $(LOGIN)
 
 test:
 	python
+
+clean:
+	find . -type f -name '*.pyc' -delete
