@@ -10,7 +10,6 @@ class Scraper(object):
         """Initiates a bot with predefined values, all of them required
 
         dbpath: a string of the filepath of the database
-        sems: a list of strings of semesters to scrub, recognized by year_to_id func
         login: a tuple of (username, password) pair
         """
         self.dbpath = dbpath
