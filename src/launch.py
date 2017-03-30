@@ -23,7 +23,7 @@ def start_realtime(data_path, sems, curr, algo, login):
     algo: a string of the algorithm specified to run the bot
     login: a tuple of username and password
     """
-    print 'starting realtime bot for semester %s' % curr
+    print ('starting realtime bot for semester %s' % curr)
 
 def start_scraper(data_path, sems, login):
     """This function starts a scraper and scrub the piazza of specific
@@ -33,7 +33,13 @@ def start_scraper(data_path, sems, login):
     sems: a list of strings of semesters to be scrubbed
     login: a tuple of username and password
     """
-    print 'starting scraper for semester %s' % ' '.join(sems)
+    print ('starting scraper for semester %s' % ' '.join(sems))
+    global scraper
+    scraper = bot.scraper.Scraper(data_path, login)
+    scraper.load_databases()
+    for sem in sems:
+        scraper.scrape(sem)
+    scraper.store_databases()
 
 if __name__ == '__main__':
     import argparse

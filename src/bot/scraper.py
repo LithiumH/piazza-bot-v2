@@ -1,6 +1,6 @@
 import json
 from piazza_api import Piazza
-from bot.utils import id_to_year, year_to_id, send_email
+from bot.utils import id_to_year, year_to_id, send_email, get_post, translate_post
 
 class Scraper(object):
     """This Scraper class defines a scraper that will scrape the piazza
@@ -24,32 +24,48 @@ class Scraper(object):
         if data:
             self.data = data
         else:
-            f = open(self.dbpath)
-            self.data = json.load(f.read())
-            f.close()
+            try:
+                f = open(self.dbpath, 'r')
+                self.data = json.load(f)
+                f.close()
+            except:
+                print('couldn\'t load databases')
 
     def store_databases(self):
         """Writes the entire database to the file, OVERWRITING the entire file!
         Caution is advised as this function is highly destructive, and it is designed
         that way"""
-        f = open(self.dbpath)
+        f = open(self.dbpath, 'w')
         result = json.dumps(self.data)
         f.write(result)
         f.close()
 
     def scrape(self, sem):
-        """Scrape a particular semester and store/update it in the database
+        """Scrape a particular semester and storeit in the database.
+        Notice if the semester is already scraped then it ignores this semester.
+        The reason is we don't know whether some of the posts are already in the
+        database, so to avoid double scraping we ignore the ones we already scraped.
 
         sem: a string of the semester name, e.g. fa16
         """
         class_id = year_to_id(sem)
+        for c in self.data:
+            if c['class_id'] == class_id:
+                return
         network = self.p.network(class_id)
-        limit = 999999
-        feed = network.get_feed(limit=999999, offset=0)
-        cids = [(post['nr'], post['id']) for post in feed['feed']]
-        cids = cids[:limit]
+        try:
+            feed = network.get_feed(limit=99999, offset=0)
+        except:
+            print('error getting feed from {0}'.format(sem))
+            return
+        result = {'class_id': class_id, 'posts': []}
+        self.data += [result]
+        cids = ((post['nr'], post['id']) for post in feed['feed'])
         for cidn, cid in cids:
-            pass
+            post = get_post(network, class_id, cid)
+            if post is not None and post['type'] == 'question':
+                post = translate_post(class_id, post)
+                result['posts'].append(post)
 
 
 
