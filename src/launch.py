@@ -1,6 +1,7 @@
 # This is the launch script to start everything.
 import bot.realtime
 import bot.scraper
+import ml.oracle
 
 def login_prompt():
     import getpass
@@ -25,6 +26,16 @@ def start_realtime(data_path, sems, curr, algo, login):
     """
     print ('starting realtime bot for semester %s' % curr)
 
+def start_ml(data_path, corpus_path):
+    """This function is used to test the Oracle interactively. When type in a question
+    it will respond the closest matched question, its answer, and its similarity
+
+    data_path: a string of the path of the main database file
+    """
+    global o
+    o = ml.oracle.Oracle(data_path, corpus_path)
+    o.interact()
+
 def start_scraper(data_path, sems, login):
     """This function starts a scraper and scrub the piazza of specific
     semesters listed in SEMS
@@ -46,7 +57,7 @@ if __name__ == '__main__':
     import sys
     all_sem = ['sp17', 'fa16', 'su16', 'sp16', 'fa15', 'sp15', 'fa14', 'test']
     parser = argparse.ArgumentParser(description='Launch either bots to do your job.')
-    parser.add_argument('bot_type', type=str, choices=['realtime', 'scraper'])
+    parser.add_argument('bot_type', type=str, choices=['realtime', 'scraper', 'oracle'])
     parser.add_argument('current', type=str, nargs='?', choices=all_sem, default='test')
     parser.add_argument('--path', type=str, dest='dbpath', required=True,
             help='A string of the database filepath.')
@@ -64,6 +75,9 @@ if __name__ == '__main__':
         args = parser.parse_args()
     except:
         sys.exit(1)
+    if args.bot_type == 'oracle':
+        start_ml(args.dbpath, 'tmp/')
+        sys.exit(0)
     login = args.login
     if not login:
         login = login_prompt();
