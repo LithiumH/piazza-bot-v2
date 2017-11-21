@@ -17,24 +17,30 @@ class Scraper(object):
         self.p.user_login(*login)
         self.data = []
 
-    def load_databases(self, data=[]):
+    def load_databases(self, dbpath=''):
         """Loads the database file to a dictionary. The path should be stored inside
-        the bot."""
-        if data:
-            self.data = data
-        else:
-            try:
-                f = open(self.dbpath, 'r')
-                self.data = json.load(f)
-                f.close()
-            except:
-                print('couldn\'t load databases')
+        the bot.
 
-    def store_databases(self):
-        """Writes the entire database to the file, OVERWRITING the entire file!
-        Caution is advised as this function is highly destructive, and it is designed
-        that way"""
-        f = open(self.dbpath, 'w')
+        dbpath: string of an alternative database path.
+        """
+        if not dbpath:
+            dbpath = self.dbpath
+        try:
+            f = open(dbpath, 'r')
+            self.data = json.load(f)
+            f.close()
+        except:
+            print('couldn\'t load databases')
+
+    def store_databases(self, dbpath=''):
+        """Writes the entire database to the file path stored inside the bot. Or an alternative
+        database file given to this function.
+
+        dbpath: string of an alternative database path.
+        """
+        if not dbpath:
+            dbpath = self.dbpath
+        f = open(dbpath, 'w')
         result = json.dumps(self.data)
         f.write(result)
         f.close()
